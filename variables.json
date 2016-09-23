@@ -1,0 +1,8 @@
+{
+  "url_7zip": "http://www.7-zip.org/a/7z1602-x64.exe",
+  "url_sysinternals": "https://download.sysinternals.com/files/SysinternalsSuite.zip",
+  "url_firefox": "https://download.mozilla.org/?product=firefox-49.0-SSL&os=win64&lang=en-US",
+  "iso_url": "./iso/14393.0.160715-1616.RS1_RELEASE_CLIENTENTERPRISEEVAL_OEMRET_X64FRE_EN-US.ISO",
+  "iso_checksum_type": "sha1",
+  "iso_checksum": "a86ae3d664553cd0ee9a6bcd83a5dbe92e3dc41a"
+}

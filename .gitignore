@@ -1,0 +1,11 @@
+# Build
+packer_cache/
+packer-output/
+*.[Ii][Ss][Oo]
+*.xml
+
+# Logs
+*.log
+
+# OS
+.DS_Store
