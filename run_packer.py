@@ -1,0 +1,48 @@
+"""
+Script for building a VirtualBox image with Packer
+"""
+
+import argparse
+import os
+import subprocess
+
+AUTOUNATTEND_TEMPLATE = './answerfiles/windows10/Autounattend.xml.template'
+AUTOUNATTEND_XML = './answerfiles/windows10/Autounattend.xml'
+
+def run_packer(username, password):
+    write_autounattend_file(username, password)
+    os.environ['WINRM_USERNAME'] = username
+    os.environ['WINRM_PASSWORD'] = password
+    os.environ['PACKER_LOG'] = '1'
+    os.environ['PACKER_LOG_PATH'] = 'packer.log'
+    subprocess.check_call(['/opt/packer/packer', 'build', '-var-file=variables.json', 'windows_10.json'])
+
+def write_autounattend_file(username, password):
+    template = open(AUTOUNATTEND_TEMPLATE).read()
+    autounattend_content = template.replace('${username}', username)
+    autounattend_content = autounattend_content.replace('${password}', password)
+    autounattend_file = open(AUTOUNATTEND_XML, 'w')
+    autounattend_file.write(autounattend_content)
+    autounattend_file.close()
+
+def main():
+    parser = argparse.ArgumentParser(
+        description=('Script for building a VirtualBox image with Packer'))
+    parser.set_defaults(screenshots=True)
+    parser.add_argument('-u', '--username',
+                        dest='username',
+                        action='store',
+                        required=True,
+                        help='The name of the user in the VirtualBox image')
+    parser.add_argument('-p', '--password',
+                        dest='password',
+                        action='store',
+                        required=True,
+                        help='The users password')
+
+    args = parser.parse_args()
+    run_packer(args.username,
+               args.password)
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,86 @@
+{
+  "variables": {
+    "username": "{{env `WINRM_USERNAME`}}",
+    "password": "{{env `WINRM_PASSWORD`}}"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "iso_url": "{{user `iso_url`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "headless": false,
+      "communicator": "winrm",
+      "winrm_username": "{{user `username`}}",
+      "winrm_password": "{{user `password`}}",
+      "shutdown_command": "shutdown /s /t 30 /f /d p:4:1 /c \"Packer is shutting down Windows\"",
+      "guest_os_type": "Windows10_64",
+      "disk_size": 40960,
+      "vm_name": "windows10-{{build_type}}-{{timestamp}}",
+      "output_directory": "packer-output",
+      "format": "ova",
+      "guest_additions_mode": "attach",
+      "floppy_files": [
+        "./answerfiles/windows10/Autounattend.xml",
+        "./scripts/fixnetwork.ps1",
+        "./scripts/oracle-cert.cer"
+      ],
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--memory", "2048"],
+        ["modifyvm", "{{.Name}}", "--cpus", "2"],
+        ["modifyvm", "{{.Name}}", "--vram", "48"],
+        ["modifyvm", "{{.Name}}", "--hpet", "on"],
+        ["setextradata", "{{.Name}}", "CustomVideoMode1", "1600x1200x32"]
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "powershell",
+      "inline": [
+        "(New-Object Net.WebClient).DownloadFile('{{user `url_firefox`}}', \"$Env:USERPROFILE\\Downloads\\FirefoxSetup.exe\")",
+        "(New-Object Net.WebClient).DownloadFile('{{user `url_7zip`}}', \"$Env:USERPROFILE\\Downloads\\7z1602-x64.exe\")",
+        "(New-Object Net.WebClient).DownloadFile('{{user `url_sysinternals`}}', \"$Env:USERPROFILE\\Downloads\\SysinternalsSuite.zip\")"
+      ]
+    },
+    {
+      "type": "windows-shell",
+      "inline": [
+        "start /B /WAIT \"Install Firefox\" \"%USERPROFILE%\\Downloads\\FirefoxSetup.exe\" -ms",
+        "start /B /WAIT \"Install 7-Zip\" \"%USERPROFILE%\\Downloads\\7z1602-x64.exe\" /S",
+        "setx /M PATH \"%PATH%;%PROGRAMFILES%\\7-Zip\""
+      ]
+    },
+    {
+        "type": "powershell",
+        "elevated_user": "{{user `username`}}",
+        "elevated_password": "{{user `password`}}",
+        "script": "scripts/Install-WindowsUpdates.ps1"
+    },
+    {
+        "type": "windows-restart",
+        "restart_command": "powershell -Command \"& {(Get-WmiObject Win32_OperatingSystem).LastBootUpTime > \"$Env:TEMP\\lastboot.txt\"; Restart-Computer -Force}\"",
+        "restart_check_command": "powershell -Command \"& {if ((Get-Content \"$Env:TEMP\\lastboot.txt\") -eq (Get-WmiObject Win32_OperatingSystem).LastBootUpTime) {Write-Output 'Not restarted yet, sleep for 720 s.'; Start-Sleep 720} else {Write-Output 'Reboot complete'}}\"",
+        "restart_timeout": "15m"
+    },
+    {
+      "type": "windows-shell",
+      "pause_before": "1m",
+      "scripts": [
+        "scripts/installSysinternals.bat",
+        "scripts/configureInternetExplorer.bat",
+        "scripts/configureFirefox.bat"
+      ]
+    },
+    {
+      "type": "windows-shell",
+      "inline": [
+        "reg add \"HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU\" /v NoAutoUpdate /t REG_DWORD /d 1 /f"
+      ]
+    },
+    {
+      "type": "windows-shell",
+      "script": "scripts/cleanup.bat"
+    }
+  ]
+}
