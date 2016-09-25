@@ -40,6 +40,7 @@
       "inline": [
         "(New-Object Net.WebClient).DownloadFile('{{user `url_firefox`}}', \"$Env:USERPROFILE\\Downloads\\FirefoxSetup.exe\")",
         "(New-Object Net.WebClient).DownloadFile('{{user `url_7zip`}}', \"$Env:USERPROFILE\\Downloads\\7z1602-x64.exe\")",
+        "(New-Object Net.WebClient).DownloadFile('{{user `url_python`}}', \"$Env:USERPROFILE\\Downloads\\python-2.7.12.amd64.msi\")",
         "(New-Object Net.WebClient).DownloadFile('{{user `url_sysinternals`}}', \"$Env:USERPROFILE\\Downloads\\SysinternalsSuite.zip\")"
       ]
     },
@@ -48,7 +49,8 @@
       "inline": [
         "start /B /WAIT \"Install Firefox\" \"%USERPROFILE%\\Downloads\\FirefoxSetup.exe\" -ms",
         "start /B /WAIT \"Install 7-Zip\" \"%USERPROFILE%\\Downloads\\7z1602-x64.exe\" /S",
-        "setx /M PATH \"%PATH%;%PROGRAMFILES%\\7-Zip\""
+        "start /B /WAIT \"Install Python\" msiexec.exe /i \"%USERPROFILE%\\Downloads\\python-2.7.12.amd64.msi\" /qn /norestart",
+        "setx /M PATH \"%PATH%;%PROGRAMFILES%\\7-Zip;%SYSTEMDRIVE%\\Python27\""
       ]
     },
     {
