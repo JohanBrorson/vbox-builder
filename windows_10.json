@@ -1,7 +1,8 @@
 {
   "variables": {
     "username": "{{env `WINRM_USERNAME`}}",
-    "password": "{{env `WINRM_PASSWORD`}}"
+    "password": "{{env `WINRM_PASSWORD`}}",
+    "skip_window_updates": "{{env `SKIP_WINDOWS_UPDATES`}}"
   },
   "builders": [
     {
@@ -50,7 +51,8 @@
         "start /B /WAIT \"Install Firefox\" \"%USERPROFILE%\\Downloads\\FirefoxSetup.exe\" -ms",
         "start /B /WAIT \"Install 7-Zip\" \"%USERPROFILE%\\Downloads\\7z1602-x64.exe\" /S",
         "start /B /WAIT \"Install Python\" msiexec.exe /i \"%USERPROFILE%\\Downloads\\python-2.7.12.amd64.msi\" /qn /norestart",
-        "setx /M PATH \"%PATH%;%PROGRAMFILES%\\7-Zip;%SYSTEMDRIVE%\\Python27\""
+        "setx /M PATH \"%PATH%;%PROGRAMFILES%\\7-Zip;%SYSTEMDRIVE%\\Python27\"",
+        "setx /M SKIP_WINDOWS_UPDATES {{user `skip_window_updates`}}"
       ]
     },
     {
