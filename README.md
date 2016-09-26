@@ -11,7 +11,12 @@ _Some pieces to this repo has been borrowed from [Windows Templates for Packer](
 - Download Windows 10 Enterprise Evaluation Copy from [https://www.microsoft.com/en-us/evalcenter/evaluate-windows-10-enterprise?i=1] and save it in ./iso
 
 ## Create Virtual Machine
-
+The following command will create a Windows 10 virtual machine
 ```
 $ python run_packer.py --username myUser --password myPassword
+```
+
+The `--no-updates` argument will skip the installation of Windows updates and can be used to speed up the creation of a virtual machine.
+```
+$ python run_packer.py --username myUser --password myPassword --no-updates
 ```

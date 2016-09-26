@@ -1,3 +1,8 @@
+if ($Env:SKIP_WINDOWS_UPDATES -eq "True") {
+  Write-Host "Skip installation of Windows updates"
+  exit
+}
+
 $Criteria = "IsInstalled=0 and Type='Software'"
 
 Write-Host "Search for available Microsoft updates"
