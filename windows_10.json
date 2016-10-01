@@ -2,7 +2,9 @@
   "variables": {
     "username": "{{env `WINRM_USERNAME`}}",
     "password": "{{env `WINRM_PASSWORD`}}",
-    "skip_window_updates": "{{env `SKIP_WINDOWS_UPDATES`}}"
+    "skip_window_updates": "{{env `SKIP_WINDOWS_UPDATES`}}",
+    "jdk_update_version": "101",
+    "maven_version": "3.3.9"
   },
   "builders": [
     {
@@ -37,6 +39,10 @@
   ],
   "provisioners": [
     {
+        "type": "powershell",
+        "script": "scripts/Download-JDK.ps1"
+    },
+    {
       "type": "powershell",
       "inline": [
         "(New-Object Net.WebClient).DownloadFile('{{user `url_firefox`}}', \"$Env:USERPROFILE\\Downloads\\FirefoxSetup.exe\")",
@@ -44,6 +50,8 @@
         "(New-Object Net.WebClient).DownloadFile('{{user `url_git`}}', \"$Env:USERPROFILE\\Downloads\\Git-2.10.0-64-bit.exe\")",
         "(New-Object Net.WebClient).DownloadFile('{{user `url_atom`}}', \"$Env:USERPROFILE\\Downloads\\AtomSetup.exe\")",
         "(New-Object Net.WebClient).DownloadFile('{{user `url_python`}}', \"$Env:USERPROFILE\\Downloads\\python-2.7.12.amd64.msi\")",
+        "(New-Object Net.WebClient).DownloadFile('{{user `url_intellij`}}', \"$Env:USERPROFILE\\Downloads\\ideaIC-2016.2.4.exe\")",
+        "(New-Object Net.WebClient).DownloadFile('{{user `url_maven`}}', \"$Env:USERPROFILE\\Downloads\\apache-maven-{{user `maven_version`}}-bin.zip\")",
         "(New-Object Net.WebClient).DownloadFile('{{user `url_sysinternals`}}', \"$Env:USERPROFILE\\Downloads\\SysinternalsSuite.zip\")"
       ]
     },
@@ -55,14 +63,18 @@
         "start /B /WAIT \"Install Git\" \"%USERPROFILE%\\Downloads\\Git-2.10.0-64-bit.exe\" /VERYSILENT /NORESTART",
         "start /B /WAIT \"Install Atom\" \"%USERPROFILE%\\Downloads\\AtomSetup.exe\" --silent",
         "start /B /WAIT \"Install Python\" msiexec.exe /i \"%USERPROFILE%\\Downloads\\python-2.7.12.amd64.msi\" /qn /norestart",
-        "setx /M PATH \"%PATH%;%PROGRAMFILES%\\7-Zip;%SYSTEMDRIVE%\\Python27\"",
-        "setx /M SKIP_WINDOWS_UPDATES {{user `skip_window_updates`}}"
+        "start /B /WAIT \"Install IntelliJ\" \"%USERPROFILE%\\Downloads\\ideaIC-2016.2.4.exe\" /S",
+        "start /B /WAIT \"Install JDK\" \"%USERPROFILE%\\Downloads\\jdk-8u{{user `jdk_update_version`}}-windows-x64.exe\" /s ADDLOCAL=\"ToolsFeature,SourceFeature,PublicjreFeature\"",
+        "\"%PROGRAMFILES%\\7-Zip\\7z.exe\" x \"%USERPROFILE%\\Downloads\\apache-maven-{{user `maven_version`}}-bin.zip\" -o\"%PROGRAMFILES%\" -y",
+        "setx /M PATH \"%PATH%;%PROGRAMFILES%\\7-Zip;%SYSTEMDRIVE%\\Python27;%PROGRAMFILES%\\apache-maven-{{user `maven_version`}}\\bin;%PROGRAMFILES%\\Java\\jdk1.8.0_{{user `jdk_update_version`}}\\bin\"",
+        "setx /M JAVA_HOME \"%PROGRAMFILES%\\Java\\jdk1.8.0_{{user `jdk_update_version`}}\""
       ]
     },
     {
         "type": "powershell",
         "elevated_user": "{{user `username`}}",
         "elevated_password": "{{user `password`}}",
+        "environment_vars": "SKIP_WINDOWS_UPDATES={{user `skip_window_updates`}}",
         "script": "scripts/Install-WindowsUpdates.ps1"
     },
     {
