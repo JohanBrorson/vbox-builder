@@ -5,6 +5,8 @@
   "url_python": "https://www.python.org/ftp/python/2.7.12/python-2.7.12.amd64.msi",
   "url_git": "https://github.com/git-for-windows/git/releases/download/v2.10.0.windows.1/Git-2.10.0-64-bit.exe",
   "url_atom": "https://github.com/atom/atom/releases/download/v1.10.2/AtomSetup.exe",
+  "url_intellij": "https://download.jetbrains.com/idea/ideaIC-2016.2.4.exe",
+  "url_maven": "http://apache.mirrors.spacedump.net/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip",
   "iso_url": "./iso/14393.0.160715-1616.RS1_RELEASE_CLIENTENTERPRISEEVAL_OEMRET_X64FRE_EN-US.ISO",
   "iso_checksum_type": "sha1",
   "iso_checksum": "a86ae3d664553cd0ee9a6bcd83a5dbe92e3dc41a"
