@@ -1,6 +1,6 @@
-$JdkVersion = "8u121"
+$JdkVersion = "8u131"
 $FileName = "jdk-${JdkVersion}-windows-x64.exe"
-$Source = "http://download.oracle.com/otn-pub/java/jdk/${JdkVersion}-b13/e9e7ea248e2c4826b92b3f075a80e441/${FileName}"
+$Source = "https://edelivery.oracle.com/otn-pub/java/jdk/${JdkVersion}-b11/d54c1d3a095b4ff2b6607d096fa80163/${FileName}"
 $Destination = "$Env:USERPROFILE\Downloads\$FileName"
 $Client = New-Object System.Net.WebClient
 $Cookie = "oraclelicense=accept-securebackup-cookie"

@@ -3,8 +3,8 @@
     "username": "{{env `WINRM_USERNAME`}}",
     "password": "{{env `WINRM_PASSWORD`}}",
     "skip_window_updates": "{{env `SKIP_WINDOWS_UPDATES`}}",
-    "jdk_update_version": "121",
-    "maven_version": "3.3.9"
+    "jdk_update_version": "131",
+    "maven_version": "3.5.0"
   },
   "builders": [
     {
@@ -32,7 +32,7 @@
       "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--memory", "2048"],
         ["modifyvm", "{{.Name}}", "--cpus", "2"],
-        ["modifyvm", "{{.Name}}", "--vram", "48"],
+        ["modifyvm", "{{.Name}}", "--vram", "64"],
         ["modifyvm", "{{.Name}}", "--hpet", "on"],
         ["setextradata", "{{.Name}}", "CustomVideoMode1", "1600x1200x32"]
       ]
