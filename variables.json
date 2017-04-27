@@ -1,13 +1,13 @@
 {
   "url_7zip": "http://www.7-zip.org/a/7z1604-x64.exe",
   "url_sysinternals": "https://download.sysinternals.com/files/SysinternalsSuite.zip",
-  "url_firefox": "https://download.mozilla.org/?product=firefox-50.1.0-SSL&os=win64&lang=en-US",
+  "url_firefox": "https://download.mozilla.org/?product=firefox-53.0-SSL&os=win64&lang=en-US",
   "url_python": "https://www.python.org/ftp/python/2.7.13/python-2.7.13.amd64.msi",
-  "url_git": "https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.3/Git-2.11.0.3-64-bit.exe",
-  "url_atom": "https://github.com/atom/atom/releases/download/v1.13.0/AtomSetup.exe",
-  "url_intellij": "https://download.jetbrains.com/idea/ideaIC-2016.3.3.exe",
-  "url_maven": "http://apache.mirrors.spacedump.net/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip",
-  "iso_url": "./iso/14393.0.160715-1616.RS1_RELEASE_CLIENTENTERPRISEEVAL_OEMRET_X64FRE_EN-US.ISO",
+  "url_git": "https://github.com/git-for-windows/git/releases/download/v2.12.2.windows.2/Git-2.12.2.2-64-bit.exe",
+  "url_atom": "https://github.com/atom/atom/releases/download/v1.16.0/AtomSetup.exe",
+  "url_intellij": "https://download.jetbrains.com/idea/ideaIC-2017.1.1.exe",
+  "url_maven": "http://www-eu.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.zip",
+  "iso_url": "./iso/15063.0.170317-1834.RS2_RELEASE_CLIENTENTERPRISEEVAL_OEMRET_X64FRE_EN-US.ISO",
   "iso_checksum_type": "sha1",
-  "iso_checksum": "a86ae3d664553cd0ee9a6bcd83a5dbe92e3dc41a"
+  "iso_checksum": "6c60f91bf0ad7b20f469ab8f80863035c517f34f"
 }
