@@ -10,7 +10,7 @@ The following software will be installed on the virtual machine:
 - Firefox
 - Python
 - Git for Windows
-- Atom
+- VS Code
 - IntelliJ IDEA
 - Maven
 
