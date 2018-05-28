@@ -3,8 +3,8 @@
     "username": "{{env `WINRM_USERNAME`}}",
     "password": "{{env `WINRM_PASSWORD`}}",
     "skip_window_updates": "{{env `SKIP_WINDOWS_UPDATES`}}",
-    "jdk_update_version": "131",
-    "maven_version": "3.5.0"
+    "jdk_update_version": "171",
+    "maven_version": "3.5.3"
   },
   "builders": [
     {
@@ -46,6 +46,7 @@
     {
       "type": "powershell",
       "inline": [
+        "[System.Net.ServicePointManager]::SecurityProtocol = \"Ssl3, Tls,Tls11,Tls12\"",
         "(New-Object Net.WebClient).DownloadFile('{{user `url_firefox`}}', \"$Env:USERPROFILE\\Downloads\\FirefoxSetup.exe\")",
         "(New-Object Net.WebClient).DownloadFile('{{user `url_7zip`}}', \"$Env:USERPROFILE\\Downloads\\7ZipSetup.exe\")",
         "(New-Object Net.WebClient).DownloadFile('{{user `url_git`}}', \"$Env:USERPROFILE\\Downloads\\GitSetup.exe\")",
