@@ -286,7 +286,7 @@
             <OEMInformation>
                 <HelpCustomized>false</HelpCustomized>
             </OEMInformation>
-            <ComputerName>WIN10</ComputerName>
+            <ComputerName>*</ComputerName>
             <TimeZone>GMT Standard Time</TimeZone>
             <RegisteredOwner/>
         </component>
