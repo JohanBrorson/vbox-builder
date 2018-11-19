@@ -3,7 +3,7 @@
     "username": "{{env `WINRM_USERNAME`}}",
     "password": "{{env `WINRM_PASSWORD`}}",
     "skip_window_updates": "{{env `SKIP_WINDOWS_UPDATES`}}",
-    "jdk_update_version": "171",
+    "jdk_update_version": "11.0.1",
     "maven_version": "3.5.3"
   },
   "builders": [
@@ -66,10 +66,10 @@
         "start /B /WAIT \"Install VS Code\" \"%USERPROFILE%\\Downloads\\VSCodeSetup.exe\" /VERYSILENT /NORESTART /MERGETASKS='!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath'",
         "start /B /WAIT \"Install Python\" msiexec.exe /i \"%USERPROFILE%\\Downloads\\PythonSetup.msi\" /qn /norestart",
         "start /B /WAIT \"Install IntelliJ\" \"%USERPROFILE%\\Downloads\\IdeaSetup.exe\" /S",
-        "start /B /WAIT \"Install JDK\" \"%USERPROFILE%\\Downloads\\jdk-8u{{user `jdk_update_version`}}-windows-x64.exe\" /s ADDLOCAL=\"ToolsFeature,SourceFeature,PublicjreFeature\"",
+        "start /B /WAIT \"Install JDK\" \"%USERPROFILE%\\Downloads\\jdk-{{user `jdk_update_version`}}_windows-x64_bin.exe\" /s ADDLOCAL=\"ToolsFeature,SourceFeature\"",
         "\"%PROGRAMFILES%\\7-Zip\\7z.exe\" x \"%USERPROFILE%\\Downloads\\apache-maven-{{user `maven_version`}}-bin.zip\" -o\"%PROGRAMFILES%\" -y",
-        "setx /M PATH \"%PATH%;%PROGRAMFILES%\\7-Zip;%SYSTEMDRIVE%\\Python27;%PROGRAMFILES%\\apache-maven-{{user `maven_version`}}\\bin;%PROGRAMFILES%\\Java\\jdk1.8.0_{{user `jdk_update_version`}}\\bin\"",
-        "setx /M JAVA_HOME \"%PROGRAMFILES%\\Java\\jdk1.8.0_{{user `jdk_update_version`}}\""
+        "setx /M PATH \"%PATH%;%PROGRAMFILES%\\7-Zip;%SYSTEMDRIVE%\\Python27;%PROGRAMFILES%\\apache-maven-{{user `maven_version`}}\\bin;%PROGRAMFILES%\\Java\\jdk-{{user `jdk_update_version`}}\\bin\"",
+        "setx /M JAVA_HOME \"%PROGRAMFILES%\\Java\\jdk-{{user `jdk_update_version`}}\""
       ]
     },
     {
