@@ -3,8 +3,7 @@
     "username": "{{env `WINRM_USERNAME`}}",
     "password": "{{env `WINRM_PASSWORD`}}",
     "skip_window_updates": "{{env `SKIP_WINDOWS_UPDATES`}}",
-    "jdk_update_version": "11.0.1",
-    "maven_version": "3.5.3"
+    "jdk_update_version": "11.0.1"
   },
   "builders": [
     {
@@ -53,7 +52,7 @@
         "(New-Object Net.WebClient).DownloadFile('{{user `url_vscode`}}', \"$Env:USERPROFILE\\Downloads\\VSCodeSetup.exe\")",
         "(New-Object Net.WebClient).DownloadFile('{{user `url_python`}}', \"$Env:USERPROFILE\\Downloads\\PythonSetup.msi\")",
         "(New-Object Net.WebClient).DownloadFile('{{user `url_intellij`}}', \"$Env:USERPROFILE\\Downloads\\IdeaSetup.exe\")",
-        "(New-Object Net.WebClient).DownloadFile('{{user `url_maven`}}', \"$Env:USERPROFILE\\Downloads\\apache-maven-{{user `maven_version`}}-bin.zip\")",
+        "(New-Object Net.WebClient).DownloadFile('{{user `url_maven`}}', \"$Env:USERPROFILE\\Downloads\\apache-maven.zip\")",
         "(New-Object Net.WebClient).DownloadFile('{{user `url_sysinternals`}}', \"$Env:USERPROFILE\\Downloads\\SysinternalsSuite.zip\")"
       ]
     },
@@ -67,8 +66,9 @@
         "start /B /WAIT \"Install Python\" msiexec.exe /i \"%USERPROFILE%\\Downloads\\PythonSetup.msi\" /qn /norestart",
         "start /B /WAIT \"Install IntelliJ\" \"%USERPROFILE%\\Downloads\\IdeaSetup.exe\" /S",
         "start /B /WAIT \"Install JDK\" \"%USERPROFILE%\\Downloads\\jdk-{{user `jdk_update_version`}}_windows-x64_bin.exe\" /s ADDLOCAL=\"ToolsFeature,SourceFeature\"",
-        "\"%PROGRAMFILES%\\7-Zip\\7z.exe\" x \"%USERPROFILE%\\Downloads\\apache-maven-{{user `maven_version`}}-bin.zip\" -o\"%PROGRAMFILES%\" -y",
-        "setx /M PATH \"%PATH%;%PROGRAMFILES%\\7-Zip;%SYSTEMDRIVE%\\Python27;%PROGRAMFILES%\\apache-maven-{{user `maven_version`}}\\bin;%PROGRAMFILES%\\Java\\jdk-{{user `jdk_update_version`}}\\bin\"",
+        "\"%PROGRAMFILES%\\7-Zip\\7z.exe\" x \"%USERPROFILE%\\Downloads\\apache-maven.zip\" -o\"%PROGRAMFILES%\" -y",
+        "move \"%PROGRAMFILES%\\apache-maven*\" \"%PROGRAMFILES%\\apache-maven\"",
+        "setx /M PATH \"%PATH%;%PROGRAMFILES%\\7-Zip;%SYSTEMDRIVE%\\Python27;%PROGRAMFILES%\\apache-maven\\bin;%PROGRAMFILES%\\Java\\jdk-{{user `jdk_update_version`}}\\bin\"",
         "setx /M JAVA_HOME \"%PROGRAMFILES%\\Java\\jdk-{{user `jdk_update_version`}}\""
       ]
     },

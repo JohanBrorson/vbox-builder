@@ -29,7 +29,7 @@ def write_autounattend_file(username, password):
     autounattend_file.close()
 
 def main():
-    """"Main function"""
+    """Main function"""
     parser = argparse.ArgumentParser(
         description=('Script for building a VirtualBox image with Packer'))
     parser.set_defaults(skip_window_updates=False)
