@@ -2,8 +2,7 @@
   "variables": {
     "username": "{{env `WINRM_USERNAME`}}",
     "password": "{{env `WINRM_PASSWORD`}}",
-    "skip_window_updates": "{{env `SKIP_WINDOWS_UPDATES`}}",
-    "jdk_update_version": "11.0.1"
+    "skip_window_updates": "{{env `SKIP_WINDOWS_UPDATES`}}"
   },
   "builders": [
     {
@@ -22,11 +21,12 @@
       "output_directory": "packer-output",
       "format": "ova",
       "guest_additions_mode": "attach",
-      "virtualbox_version_file": "C:\\.vbox_version",
+      "virtualbox_version_file": "",
       "floppy_files": [
         "./answerfiles/windows10/Autounattend.xml",
         "./scripts/fixnetwork.ps1",
-        "./scripts/oracle-cert.cer"
+        "./scripts/oracle-cert.cer",
+        "./scripts/silent.config"
       ],
       "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--memory", "2048"],
@@ -39,10 +39,6 @@
   ],
   "provisioners": [
     {
-        "type": "powershell",
-        "script": "scripts/Download-JDK.ps1"
-    },
-    {
       "type": "powershell",
       "inline": [
         "[System.Net.ServicePointManager]::SecurityProtocol = \"Ssl3, Tls,Tls11,Tls12\"",
@@ -53,6 +49,7 @@
         "(New-Object Net.WebClient).DownloadFile('{{user `url_python`}}', \"$Env:USERPROFILE\\Downloads\\PythonSetup.msi\")",
         "(New-Object Net.WebClient).DownloadFile('{{user `url_intellij`}}', \"$Env:USERPROFILE\\Downloads\\IdeaSetup.exe\")",
         "(New-Object Net.WebClient).DownloadFile('{{user `url_maven`}}', \"$Env:USERPROFILE\\Downloads\\apache-maven.zip\")",
+        "(New-Object Net.WebClient).DownloadFile('{{user `url_jdk`}}', \"$Env:USERPROFILE\\Downloads\\AdoptOpenJDK.msi\")",
         "(New-Object Net.WebClient).DownloadFile('{{user `url_sysinternals`}}', \"$Env:USERPROFILE\\Downloads\\SysinternalsSuite.zip\")"
       ]
     },
@@ -64,12 +61,11 @@
         "start /B /WAIT \"Install Git\" \"%USERPROFILE%\\Downloads\\GitSetup.exe\" /VERYSILENT /NORESTART",
         "start /B /WAIT \"Install VS Code\" \"%USERPROFILE%\\Downloads\\VSCodeSetup.exe\" /VERYSILENT /NORESTART /MERGETASKS='!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath'",
         "start /B /WAIT \"Install Python\" msiexec.exe /i \"%USERPROFILE%\\Downloads\\PythonSetup.msi\" /qn /norestart",
-        "start /B /WAIT \"Install IntelliJ\" \"%USERPROFILE%\\Downloads\\IdeaSetup.exe\" /S",
-        "start /B /WAIT \"Install JDK\" \"%USERPROFILE%\\Downloads\\jdk-{{user `jdk_update_version`}}_windows-x64_bin.exe\" /s ADDLOCAL=\"ToolsFeature,SourceFeature\"",
+        "start /B /WAIT \"Install IntelliJ\" \"%USERPROFILE%\\Downloads\\IdeaSetup.exe\" /S /CONFIG=A:\\silent.config /LOG=\"%TEMP%\\IdeaSetup.log\"",
+        "start /B /WAIT \"Install JDK\" msiexec /i \"%USERPROFILE%\\Downloads\\AdoptOpenJDK.msi\" ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome INSTALLDIR=\"%PROGRAMFILES%\\AdoptOpenJDK\\\" /qn /norestart",
         "\"%PROGRAMFILES%\\7-Zip\\7z.exe\" x \"%USERPROFILE%\\Downloads\\apache-maven.zip\" -o\"%PROGRAMFILES%\" -y",
         "move \"%PROGRAMFILES%\\apache-maven*\" \"%PROGRAMFILES%\\apache-maven\"",
-        "setx /M PATH \"%PATH%;%PROGRAMFILES%\\7-Zip;%SYSTEMDRIVE%\\Python27;%PROGRAMFILES%\\apache-maven\\bin;%PROGRAMFILES%\\Java\\jdk-{{user `jdk_update_version`}}\\bin\"",
-        "setx /M JAVA_HOME \"%PROGRAMFILES%\\Java\\jdk-{{user `jdk_update_version`}}\""
+        "setx /M PATH \"%PATH%;%PROGRAMFILES%\\7-Zip;%SYSTEMDRIVE%\\Python27;%PROGRAMFILES%\\apache-maven\\bin;%PROGRAMFILES%\\AdoptOpenJDK\\bin\""
       ]
     },
     {
